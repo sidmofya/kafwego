@@ -1,29 +1,148 @@
 import type { Metadata } from "next";
 import { CTASection } from "@/components/layout";
-import Image from "next/image";
-import { Card, SectionIntro } from "@/components/ui";
+import { InvestmentFeatures, InflectionPoints, DiligencePath } from "@/components/page-sections";
+import { PageHero, SectionIntro, Card } from "@/components/ui";
 import { investmentCaseContent } from "@/content/pages/investment-case";
 
 export const metadata: Metadata = {
   title: "Investment Case",
-  description: "A disciplined investment-case summary for Kafwego's copper-gold exploration opportunity.",
+  description:
+    "A disciplined investment-case summary for Kafwego's greenfield copper-gold exploration opportunity in northwestern Zambia.",
   openGraph: { images: ["/og-investment-placeholder.jpg"] },
 };
 
 export default function InvestmentCasePage() {
   return (
     <>
-      <section className="section-gap"><div className="container-shell"><h1 className="text-4xl font-semibold">The Investment Case</h1><p className="mt-4 max-w-3xl text-charcoal-700">A disciplined greenfield entry into one of the world’s most important copper jurisdictions.</p></div>
-        <div className="container-shell mt-8">
-          <div className="relative min-h-64 overflow-hidden rounded-xl border border-stone-100 bg-stone-100">
-            <Image src="/images/terrain-placeholder.svg" alt="Investment case terrain placeholder" fill className="object-cover" />
+      <PageHero
+        eyebrow="Copper · Gold · Northwestern Zambia"
+        title="The Investment Case"
+        subtitle="A disciplined greenfield entry into one of the world's most important copper jurisdictions, structured for staged capital deployment aligned to evidence."
+      />
+
+      {/* ── Six salient features ── */}
+      <section className="section-gap bg-stone-25">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow="Why invest"
+            title="Six reasons to pay attention"
+          />
+          <InvestmentFeatures features={investmentCaseContent.features} />
+        </div>
+      </section>
+
+      {/* ── Four why sections ── */}
+      <section className="section-gap bg-white">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow="The case"
+            title="Four dimensions of the investment rationale"
+          />
+          <div className="grid gap-5 md:grid-cols-2">
+            <Card>
+              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">Why Copper</p>
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-3">Copper&rsquo;s strategic relevance</h3>
+              <p className="text-sm leading-relaxed text-charcoal-600">
+                Copper remains central to electrification, transmission, industrial systems, and
+                long-horizon infrastructure buildout. New supply is difficult to bring online,
+                increasing the strategic importance of credible discovery pipelines. Exploration-stage
+                projects with coherent geological logic and favorable jurisdiction offer exposure
+                to this dynamic without requiring construction-stage capital.
+              </p>
+            </Card>
+            <Card>
+              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">Why Zambia</p>
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-3">Zambia as a copper jurisdiction</h3>
+              <p className="text-sm leading-relaxed text-charcoal-600">
+                Zambia combines copper endowment, operating history, skilled sector participation,
+                and continued relevance to global supply chains. The Greater Lufilian Arc has hosted
+                significant copper-cobalt production for decades. For exploration-stage investors,
+                jurisdiction still matters — geology alone does not create value, but geology in a
+                credible operating jurisdiction increases the probability of realizing that value.
+              </p>
+            </Card>
+            <Card>
+              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">Why Kafwego</p>
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-3">Why this specific asset</h3>
+              <p className="text-sm leading-relaxed text-charcoal-600">
+                Kafwego offers exposure to early-stage upside in a proven copper province through
+                a project that combines coherent geological targeting, encouraging surface indications,
+                and a partnership structure designed around staged technical validation. The 108 km²
+                tenement provides district-scale scope. The IOCG thesis is technically grounded.
+                The team is execution-oriented.
+              </p>
+            </Card>
+            <Card>
+              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">Why This Structure</p>
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-3">The phased farm-in model</h3>
+              <p className="text-sm leading-relaxed text-charcoal-600">
+                The phased farm-in model is designed to align capital with evidence. Rather than
+                requiring maximum commitment at the outset, it allows partners to increase
+                participation as the technical case strengthens through exploration milestones.
+                Each stage is triggered by defined technical outcomes, not by calendar time.
+                This structure protects capital discipline while preserving full discovery upside.
+              </p>
+            </Card>
           </div>
-        </div></section>
-      <section className="pb-12"><div className="container-shell grid gap-3 md:grid-cols-3">{investmentCaseContent.features.map((f)=><Card key={f}><p className="text-sm">{f}</p></Card>)}</div></section>
-      <section className="section-gap bg-white"><div className="container-shell grid gap-5 md:grid-cols-2"><Card><h3 className="font-semibold">Why Copper</h3><p className="mt-2 text-sm text-charcoal-700">Copper remains central to electrification, transmission, industrial systems, and long-horizon infrastructure buildout. New supply is difficult to bring online, increasing the strategic importance of credible discovery pipelines.</p></Card><Card><h3 className="font-semibold">Why Zambia</h3><p className="mt-2 text-sm text-charcoal-700">Zambia combines copper endowment, operating history, skilled sector participation, and continued relevance to global supply chains. For exploration-stage investors, jurisdiction still matters because geology alone does not create value.</p></Card><Card><h3 className="font-semibold">Why Kafwego</h3><p className="mt-2 text-sm text-charcoal-700">Kafwego offers exposure to early-stage upside in a proven copper province through coherent geological targeting, encouraging surface indications, and staged technical validation.</p></Card><Card><h3 className="font-semibold">Why This Structure</h3><p className="mt-2 text-sm text-charcoal-700">The phased farm-in model aligns capital with evidence, allowing partners to increase participation as technical confidence improves.</p></Card></div></section>
-      <section className="section-gap"><div className="container-shell"><SectionIntro title="Value Inflection Points" /><div className="grid gap-3 md:grid-cols-5">{investmentCaseContent.inflections.map((i)=><Card key={i}><p className="text-sm">{i}</p></Card>)}</div></div></section>
-      <section className="section-gap bg-white"><div className="container-shell"><SectionIntro title="Diligence Pathway" /><div className="grid gap-3 md:grid-cols-5">{investmentCaseContent.diligence.map((d,idx)=><Card key={d}><p className="text-xs uppercase text-copper-500">Step {idx+1}</p><p className="mt-1 text-sm">{d}</p></Card>)}</div></div></section>
-      <CTASection title="Request the investor brief and initiate diligence" />
+        </div>
+      </section>
+
+      {/* ── Farm-in model step sequence ── */}
+      <section className="section-gap bg-stone-25">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow="Partnership structure"
+            title="Phased farm-in: how it works"
+            description="Each stage is linked to a defined technical milestone. Capital grows with confidence."
+          />
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {investmentCaseContent.farmInModel.map((stage) => (
+              <div
+                key={stage.phase}
+                className="rounded-xl border border-stone-100 bg-white p-6 shadow-sm"
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-copper-500 text-sm font-semibold text-copper-500">
+                    {stage.phase}
+                  </div>
+                  <div className="h-px flex-1 bg-stone-100" />
+                </div>
+                <h3 className="font-semibold text-charcoal-900">{stage.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{stage.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Value inflection points ── */}
+      <section className="section-gap bg-white">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow="Value moments"
+            title="Value inflection points"
+            description="Each phase of work has the potential to materially re-rate the asset as the technical case strengthens."
+          />
+          <InflectionPoints points={investmentCaseContent.inflections} />
+        </div>
+      </section>
+
+      {/* ── Diligence pathway ── */}
+      <section className="section-gap bg-stone-25">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow="How to engage"
+            title="Diligence pathway"
+            description="A structured sequence from initial brief through to commercial discussion and site visit."
+          />
+          <DiligencePath steps={investmentCaseContent.diligence} />
+        </div>
+      </section>
+
+      <CTASection
+        title="Request the investor brief and initiate diligence"
+        subtitle="The investor brief provides project summary, geological overview, and partnership structure details."
+      />
     </>
   );
 }

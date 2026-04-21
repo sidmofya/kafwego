@@ -1,45 +1,128 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/content/site";
-import { Button, Card, SectionIntro } from "@/components/ui";
+import { PageHero, SectionIntro, Card } from "@/components/ui";
+import { ContactForm } from "@/components/contact-form";
+import { MapPinIcon, CompassIcon, MilestoneIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Serious inquiry pathways for investors, technical counterparts, and media.",
+  description:
+    "Structured inquiry pathways for investors, strategic partners, technical diligence participants, and media.",
   openGraph: { images: ["/og-contact-placeholder.jpg"] },
 };
+
+const inquiryPaths = [
+  {
+    icon: <CompassIcon className="w-5 h-5" />,
+    type: "Investor / Strategic Partner",
+    description:
+      "For investors, family offices, mining executives, and strategic partners exploring a partnership or farm-in arrangement.",
+  },
+  {
+    icon: <MilestoneIcon className="w-5 h-5" />,
+    type: "Technical / Project",
+    description:
+      "For geologists, engineers, and technical counterparts wishing to discuss the exploration thesis, work program, or data.",
+  },
+  {
+    icon: <MapPinIcon className="w-5 h-5" />,
+    type: "Media / General",
+    description:
+      "For journalists, regulators, prospective partners, or general inquiries about the Kafwego Project.",
+  },
+];
 
 export default function ContactPage() {
   return (
     <>
-      <section className="section-gap">
-        <div className="container-shell"><h1 className="text-4xl font-semibold">Contact</h1><p className="mt-4 max-w-3xl text-charcoal-700">Structured inquiry pathways for investors, strategic partners, technical diligence participants, and media.</p></div>
+      <PageHero
+        eyebrow="Get in Touch"
+        title="Contact"
+        subtitle="Structured inquiry pathways for investors, strategic partners, technical diligence participants, and media. Select the most relevant pathway below."
+      />
+
+      {/* Inquiry path selector */}
+      <section className="section-gap-sm bg-stone-25">
+        <div className="container-shell">
+          <div className="grid gap-4 md:grid-cols-3">
+            {inquiryPaths.map((p) => (
+              <Card key={p.type}>
+                <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-copper-50 text-copper-500">
+                  {p.icon}
+                </div>
+                <h3 className="font-semibold text-charcoal-900">{p.type}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{p.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
       </section>
-      <section className="pb-14">
-        <div className="container-shell grid gap-6 lg:grid-cols-2">
-          <Card>
-            <SectionIntro title="Inquiry Type" description="Select the most relevant pathway." />
-            <div className="space-y-2 text-sm">
-              <p>• Investor / Strategic Partner Inquiry</p>
-              <p>• Technical / Project Inquiry</p>
-              <p>• Media / General Inquiry</p>
+
+      {/* Form + Direct contact */}
+      <section className="section-gap bg-white">
+        <div className="container-shell grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
+          <div>
+            <SectionIntro
+              eyebrow="Inquiry form"
+              title="Send an inquiry"
+              description="Complete the form below and a member of the team will respond within two business days."
+            />
+            <ContactForm />
+          </div>
+
+          {/* Direct contact sidebar */}
+          <div className="space-y-5 lg:pt-16">
+            <Card>
+              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-4">
+                Direct contact
+              </p>
+              <div className="space-y-4 text-sm">
+                <div>
+                  <p className="font-medium text-charcoal-700 mb-1">Email</p>
+                  <a
+                    href={`mailto:${siteConfig.contact.email}`}
+                    className="text-charcoal-600 hover:text-charcoal-900 transition-colors"
+                  >
+                    {siteConfig.contact.email}
+                  </a>
+                </div>
+                <div>
+                  <p className="font-medium text-charcoal-700 mb-1">Phone</p>
+                  <p className="text-charcoal-600">{siteConfig.contact.phone}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-charcoal-700 mb-1">Location</p>
+                  <p className="text-charcoal-600 leading-snug">{siteConfig.contact.location}</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-4">
+                Quick access
+              </p>
+              <div className="flex flex-col gap-2">
+                <a
+                  href={siteConfig.ctas.investorBrief.href}
+                  className="inline-flex justify-center rounded-md bg-copper-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-copper-600 transition-colors"
+                >
+                  {siteConfig.ctas.investorBrief.label}
+                </a>
+                <a
+                  href={siteConfig.ctas.technicalBriefing.href}
+                  className="inline-flex justify-center rounded-md border border-charcoal-700 px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:bg-stone-100 transition-colors"
+                >
+                  {siteConfig.ctas.technicalBriefing.label}
+                </a>
+              </div>
+            </Card>
+
+            <div className="rounded-xl border border-stone-100 bg-stone-50 p-5">
+              <p className="text-xs leading-relaxed text-charcoal-400">
+                {siteConfig.legal}
+              </p>
             </div>
-            <form className="mt-6 space-y-3">
-              <input className="w-full rounded-md border border-stone-300 px-3 py-2" placeholder="Name" />
-              <input className="w-full rounded-md border border-stone-300 px-3 py-2" placeholder="Organization" />
-              <input className="w-full rounded-md border border-stone-300 px-3 py-2" placeholder="Email" type="email" />
-              <select className="w-full rounded-md border border-stone-300 px-3 py-2"><option>Investor / Strategic Partner Inquiry</option><option>Technical / Project Inquiry</option><option>Media / General Inquiry</option></select>
-              <textarea className="w-full rounded-md border border-stone-300 px-3 py-2" rows={5} placeholder="Please describe your request" />
-              <button type="button" className="rounded-md bg-copper-500 px-4 py-2 text-white">Submit Inquiry</button>
-            </form>
-          </Card>
-          <Card>
-            <SectionIntro title="Direct Contact" />
-            <p className="text-sm text-charcoal-700">Email: {siteConfig.contact.email}</p>
-            <p className="text-sm text-charcoal-700">Phone: {siteConfig.contact.phone}</p>
-            <p className="text-sm text-charcoal-700">Location: {siteConfig.contact.location}</p>
-            <div className="mt-6 flex gap-3"><Button href="/contact?inquiry=investor">Request Investor Brief</Button><Button href="/contact?inquiry=technical" secondary>Schedule Technical Briefing</Button></div>
-            <p className="mt-8 text-xs text-charcoal-700">{siteConfig.legal}</p>
-          </Card>
+          </div>
         </div>
       </section>
     </>

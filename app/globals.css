@@ -6,6 +6,10 @@
   color-scheme: light;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-stone-25 text-charcoal-900 antialiased;
 }
@@ -15,5 +19,47 @@ body {
 }
 
 .section-gap {
-  @apply py-14 md:py-20;
+  @apply py-16 md:py-24;
+}
+
+.section-gap-sm {
+  @apply py-10 md:py-16;
+}
+
+/* Prose for article body */
+.prose-article {
+  @apply text-charcoal-800 leading-relaxed;
+}
+
+.prose-article p {
+  @apply mb-4;
+}
+
+.prose-article h2 {
+  @apply mt-8 mb-3 text-xl font-semibold text-charcoal-900;
+}
+
+.prose-article h3 {
+  @apply mt-6 mb-2 text-lg font-semibold text-charcoal-900;
+}
+
+.prose-article ul {
+  @apply mb-4 list-disc pl-5 space-y-1;
+}
+
+.prose-article ol {
+  @apply mb-4 list-decimal pl-5 space-y-1;
+}
+
+.prose-article strong {
+  @apply font-semibold text-charcoal-900;
+}
+
+/* Metric display */
+.metric-value {
+  @apply text-3xl font-light tracking-tight text-charcoal-900 md:text-4xl;
+}
+
+.metric-label {
+  @apply text-sm text-charcoal-600;
 }

@@ -6,7 +6,7 @@ export const projectPageContent = {
     ["Tenure", "108 km²"],
     ["Exploration Model", "IOCG Targeting Framework"],
     ["Partnership Model", "Phased Farm-in"],
-  ],
+  ] as [string, string][],
   geologyCards: [
     {
       title: "Structural setting",

@@ -1,61 +1,41 @@
+// Re-exports for convenience — actual implementations are in header.tsx and footer.tsx
+export { Header } from "@/components/header";
+export { Footer } from "@/components/footer";
+
 import Link from "next/link";
 import { siteConfig } from "@/content/site";
-import { Button } from "@/components/ui";
 
-export function Header() {
+export function CTASection({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle?: string;
+}) {
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-100 bg-stone-25/95 backdrop-blur">
-      <div className="container-shell flex flex-wrap items-center justify-between gap-4 py-4">
-        <Link href="/" className="text-lg font-semibold">{siteConfig.name}</Link>
-        <nav className="flex flex-wrap items-center gap-4 text-sm">
-          {siteConfig.navigation.map((item) => (
-            <Link key={item.href} href={item.href} className="text-charcoal-700 hover:text-charcoal-900">{item.label}</Link>
-          ))}
-        </nav>
-        <div className="flex gap-2">
-          <Button href={siteConfig.ctas.investorBrief.href}>{siteConfig.ctas.investorBrief.label}</Button>
-          <Button href={siteConfig.ctas.technicalBriefing.href} secondary>{siteConfig.ctas.technicalBriefing.label}</Button>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-export function Footer() {
-  return (
-    <footer className="mt-20 border-t border-stone-100 bg-white py-12">
-      <div className="container-shell grid gap-8 md:grid-cols-3">
-        <div>
-          <h3 className="font-semibold">Kafwego Project</h3>
-          <p className="mt-2 text-sm text-charcoal-700">{siteConfig.shortDescription}</p>
-        </div>
-        <div>
-          <h4 className="font-medium">Site</h4>
-          <ul className="mt-2 space-y-1 text-sm text-charcoal-700">
-            {siteConfig.navigation.map((item) => (
-              <li key={item.href}><Link href={item.href}>{item.label}</Link></li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-medium">Contact</h4>
-          <p className="mt-2 text-sm text-charcoal-700">{siteConfig.contact.email}<br />{siteConfig.contact.phone}<br />{siteConfig.contact.location}</p>
-          <div className="mt-3"><Button href={siteConfig.ctas.investorBrief.href}>{siteConfig.ctas.investorBrief.label}</Button></div>
-        </div>
-      </div>
-      <div className="container-shell mt-8 border-t border-stone-100 pt-6 text-xs text-charcoal-700">{siteConfig.legal}</div>
-    </footer>
-  );
-}
-
-export function CTASection({ title }: { title: string }) {
-  return (
-    <section className="section-gap">
-      <div className="container-shell rounded-2xl bg-charcoal-900 p-8 text-white">
-        <h3 className="text-2xl font-semibold">{title}</h3>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Button href={siteConfig.ctas.investorBrief.href}>{siteConfig.ctas.investorBrief.label}</Button>
-          <Button href={siteConfig.ctas.technicalBriefing.href} secondary>{siteConfig.ctas.technicalBriefing.label}</Button>
+    <section className="section-gap-sm">
+      <div className="container-shell">
+        <div className="rounded-2xl bg-charcoal-900 px-8 py-12 md:px-14">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl font-semibold text-white md:text-3xl">{title}</h2>
+            {subtitle && (
+              <p className="mt-3 text-stone-400 leading-relaxed">{subtitle}</p>
+            )}
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href={siteConfig.ctas.investorBrief.href}
+                className="inline-flex items-center rounded-md bg-copper-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-copper-600 transition-colors"
+              >
+                {siteConfig.ctas.investorBrief.label}
+              </Link>
+              <Link
+                href={siteConfig.ctas.technicalBriefing.href}
+                className="inline-flex items-center rounded-md border border-stone-600 px-5 py-2.5 text-sm font-medium text-stone-300 hover:border-stone-400 hover:text-white transition-colors"
+              >
+                {siteConfig.ctas.technicalBriefing.label}
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
