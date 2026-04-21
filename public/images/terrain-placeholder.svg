@@ -1,0 +1,7 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="800" fill="#EEE7DD"/>
+<path d="M0 576C120 530 240 510 360 522C480 535 600 585 720 584C840 582 960 526 1080 508C1140 499 1170 500 1200 506V800H0V576Z" fill="#CFC2B1"/>
+<path d="M0 640C140 615 280 610 420 628C560 646 700 688 840 678C980 668 1090 624 1200 612V800H0V640Z" fill="#D89A73" fill-opacity="0.5"/>
+<circle cx="930" cy="290" r="10" fill="#A95A33"/>
+<text x="950" y="295" font-family="Arial" font-size="20" fill="#303338">Zambia marker placeholder</text>
+</svg>
