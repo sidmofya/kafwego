@@ -23,7 +23,7 @@ export const siteConfig = {
     { label: "Investment Case", href: "/investment-case" },
     { label: "Team", href: "/team" },
     { label: "Responsible Development", href: "/responsible-development" },
-    { label: "News", href: "/news" },
+    { label: "The Lufilian Arc", href: "/lufilianarc" },
     { label: "Contact", href: "/contact" },
   ],
   legal:
