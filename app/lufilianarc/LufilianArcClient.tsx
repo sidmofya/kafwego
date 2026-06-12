@@ -109,7 +109,7 @@ export default function LufilianArcClient() {
     const NS = 'http://www.w3.org/2000/svg'
     const baseY = 210, basementH = 30, seaY = 58, erodeY = 128
 
-    const svg = document.getElementById('luf-viz') as SVGSVGElement
+    const svg = document.querySelector<SVGSVGElement>('#luf-viz')
     if (!svg) return
     const defs = svg.querySelector('defs')!
 
@@ -134,7 +134,7 @@ export default function LufilianArcClient() {
       return d + 'Z'
     }
 
-    function render(i: number) {
+    const render = (i: number): void => {
       const s = STAGES[i]
       Array.from(svg.children).forEach(n => { if (n !== defs) svg.removeChild(n) })
       const g = svgEl('g', {})
@@ -288,15 +288,15 @@ export default function LufilianArcClient() {
     const toX = (t: number) => 40 + (2560 - t) * 0.234375
     const toY = (d: number) => 30 + d * 30
 
-    const bcSvg = document.getElementById('luf-bc-svg') as SVGSVGElement
+    const bcSvg = document.querySelector<SVGSVGElement>('#luf-bc-svg')
     const dynG = document.getElementById('luf-bc-dyn')
     const ageEl = document.getElementById('luf-bc-age')
     const depEl = document.getElementById('luf-bc-depth')
     const titEl = document.getElementById('luf-bc-title')
     const pilEl = document.getElementById('luf-bc-pill') as HTMLElement | null
     const desEl = document.getElementById('luf-bc-desc')
-    const sldEl = document.getElementById('luf-bc-slider') as HTMLInputElement
-    const playBtn = document.getElementById('luf-bc-play') as HTMLButtonElement
+    const sldEl = document.querySelector<HTMLInputElement>('#luf-bc-slider')
+    const playBtn = document.querySelector<HTMLButtonElement>('#luf-bc-play')
     const spdEl = document.getElementById('luf-bc-speed')
     if (!bcSvg || !dynG || !sldEl || !playBtn) return
 
@@ -355,13 +355,13 @@ export default function LufilianArcClient() {
     }
 
     let timer: ReturnType<typeof setInterval> | null = null
-    function setVal(v: number) { sldEl.value = String(v); render(2560 - v) }
-    function stop() {
+    const setVal = (v: number) => { sldEl.value = String(v); render(2560 - v) }
+    const stop = () => {
       if (timer !== null) { clearInterval(timer); timer = null }
       playBtn.textContent = '▶'
       if (spdEl) spdEl.textContent = ''
     }
-    function handlePlay() {
+    const handlePlay = () => {
       if (timer !== null) { stop(); return }
       if (+sldEl.value >= 2560) setVal(0)
       playBtn.textContent = '❚❚'
@@ -374,16 +374,16 @@ export default function LufilianArcClient() {
       }, 25)
       if (spdEl) spdEl.textContent = +sldEl.value < SLOW_AT ? 'fast-forward' : 'slowed ×8'
     }
-    function handleSlider() { render(2560 - +sldEl.value) }
-    function scrub(e: PointerEvent) {
+    const handleSlider = () => { render(2560 - +sldEl.value) }
+    const scrub = (e: PointerEvent) => {
       const r = bcSvg.getBoundingClientRect()
       const sx = (e.clientX - r.left) / r.width * 680
       let v = (sx - 40) / 600 * 2560; v = Math.max(0, Math.min(2560, v))
       if (timer !== null) stop()
       setVal(v)
     }
-    function handlePointerDown(e: PointerEvent) { bcSvg.setPointerCapture(e.pointerId); scrub(e) }
-    function handlePointerMove(e: PointerEvent) { if (e.buttons) scrub(e) }
+    const handlePointerDown = (e: PointerEvent) => { bcSvg.setPointerCapture(e.pointerId); scrub(e) }
+    const handlePointerMove = (e: PointerEvent) => { if (e.buttons) scrub(e) }
 
     playBtn.addEventListener('click', handlePlay)
     sldEl.addEventListener('input', handleSlider)
