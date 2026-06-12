@@ -109,7 +109,7 @@ export default function LufilianArcClient() {
     const NS = 'http://www.w3.org/2000/svg'
     const baseY = 210, basementH = 30, seaY = 58, erodeY = 128
 
-    const svg = document.getElementById('luf-viz') as SVGSVGElement | null
+    const svg = document.getElementById('luf-viz') as SVGSVGElement
     if (!svg) return
     const defs = svg.querySelector('defs')!
 
@@ -288,15 +288,15 @@ export default function LufilianArcClient() {
     const toX = (t: number) => 40 + (2560 - t) * 0.234375
     const toY = (d: number) => 30 + d * 30
 
-    const bcSvg = document.getElementById('luf-bc-svg') as SVGSVGElement | null
+    const bcSvg = document.getElementById('luf-bc-svg') as SVGSVGElement
     const dynG = document.getElementById('luf-bc-dyn')
     const ageEl = document.getElementById('luf-bc-age')
     const depEl = document.getElementById('luf-bc-depth')
     const titEl = document.getElementById('luf-bc-title')
     const pilEl = document.getElementById('luf-bc-pill') as HTMLElement | null
     const desEl = document.getElementById('luf-bc-desc')
-    const sldEl = document.getElementById('luf-bc-slider') as HTMLInputElement | null
-    const playBtn = document.getElementById('luf-bc-play') as HTMLButtonElement | null
+    const sldEl = document.getElementById('luf-bc-slider') as HTMLInputElement
+    const playBtn = document.getElementById('luf-bc-play') as HTMLButtonElement
     const spdEl = document.getElementById('luf-bc-speed')
     if (!bcSvg || !dynG || !sldEl || !playBtn) return
 
