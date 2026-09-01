@@ -1,214 +1,204 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { CTASection } from "@/components/layout";
-import { MetricsStrip, IconCards, ValueTimeline, TeamCards } from "@/components/page-sections";
-import { SectionIntro, Button, Card, PlaceholderAsset } from "@/components/ui";
-import { MountainIcon, CompassIcon, MilestoneIcon, TeamIcon, ArrowRightIcon } from "@/components/icons";
+import {
+  EvidenceStrip,
+  IconCards,
+  OpenQuestionSection,
+  ProgressionFlow,
+  ProjectFactGrid,
+  WorkCompletedList,
+} from "@/components/page-sections";
+import { TargetMap } from "@/components/target-map";
+import { RegionalContextMap } from "@/components/regional-context-map";
+import { TechnicalDisclosures } from "@/components/technical-disclosures";
+import { SectionIntro, Button, Card } from "@/components/ui";
+import { ArrowRightIcon } from "@/components/icons";
 import { homePageContent } from "@/content/pages/home";
-import { teamPageContent } from "@/content/pages/team";
+import { targetsContent } from "@/content/pages/targets";
+import { projectPageContent } from "@/content/pages/project";
+import { projectFacts, renderFacts } from "@/content/project-facts";
 
 export const metadata: Metadata = {
-  title: "Kafwego Project | Copper-Gold Exploration in Zambia",
+  title: "Kafwego | Copper-Gold Exploration in Zambia",
   description:
-    "Kafwego is a greenfield copper-gold exploration project in northwestern Zambia, positioned in the Greater Lufilian Arc and structured for disciplined, milestone-based partnership.",
-  openGraph: { images: ["/og-placeholder.jpg"] },
+    "Kafwego is an exploration-stage copper-gold project in northwestern Zambia's Greater Lufilian Arc. Five priority targets have been defined and a 750 m RC proof-of-concept drilling programme is the next major technical step.",
 };
 
-const whyIcons = [
-  <MountainIcon className="w-5 h-5" key="mountain" />,
-  <CompassIcon className="w-5 h-5" key="compass" />,
-  <MilestoneIcon className="w-5 h-5" key="milestone" />,
-  <TeamIcon className="w-5 h-5" key="team" />,
+const tenureFacts = [
+  { label: "Licence type", fact: projectFacts.licenceType },
+  { label: "Licence area", fact: projectFacts.licenceAreaKm2 },
+  { label: "Granted", fact: projectFacts.licenceGrantDate },
+  { label: "Expiry / renewal", fact: projectFacts.licenceExpiry },
+  { label: "Current standing", fact: projectFacts.licenceStanding },
 ];
 
 export default function HomePage() {
-  const whyCards = homePageContent.whyCards.map((c, i) => ({
-    ...c,
-    icon: whyIcons[i],
-  }));
+  const { hero, evidence, explorationCase, openQuestion, targets, regional, inflection, workCompleted } =
+    homePageContent;
+  const hasTenure = renderFacts(tenureFacts).length > 0;
 
   return (
     <>
       {/* ── Hero ── */}
-      <section className="bg-charcoal-900 pb-0 pt-16 md:pt-24">
-        <div className="container-shell">
+      <section className="bg-charcoal-900 pt-16 md:pt-24">
+        <div className="container-shell pb-16 md:pb-20">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
             <div>
-              <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-charcoal-800 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-copper-400">
-                {homePageContent.hero.eyebrow}
+              <p className="mb-5 inline-flex items-center rounded-full bg-charcoal-800 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-copper-400">
+                {hero.eyebrow}
               </p>
-              <h1 className="text-5xl font-light leading-tight tracking-tight text-white md:text-6xl">
-                {homePageContent.hero.title}
+              <h1 className="text-4xl font-light leading-tight tracking-tight text-white md:text-5xl">
+                {hero.title}
               </h1>
               <div className="my-6 h-px w-12 bg-copper-500" />
-              <p className="max-w-lg text-lg leading-relaxed text-stone-400">
-                {homePageContent.hero.subtitle}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <p className="max-w-lg text-lg leading-relaxed text-stone-400">{hero.subtitle}</p>
+              <div className="mt-8 flex flex-wrap items-center gap-5">
                 <Link
-                  href="/contact?inquiry=investor"
+                  href="/contact"
                   className="inline-flex items-center gap-2 rounded-md bg-copper-500 px-5 py-3 text-sm font-medium text-white hover:bg-copper-600 transition-colors"
                 >
-                  Request Investor Brief
+                  Request Technical Package
                   <ArrowRightIcon className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/project"
-                  className="inline-flex items-center rounded-md border border-stone-600 px-5 py-3 text-sm font-medium text-stone-300 hover:border-stone-400 hover:text-white transition-colors"
+                  href="/targets"
+                  className="text-sm font-medium text-stone-300 underline-offset-4 hover:text-white hover:underline transition-colors"
                 >
-                  Explore Project
+                  Explore the Targets
                 </Link>
               </div>
             </div>
-            <div className="relative min-h-72 overflow-hidden rounded-t-xl border border-charcoal-800 lg:min-h-80">
-              <Image
-                src={homePageContent.hero.image}
-                alt={homePageContent.hero.imageAlt}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+            <TargetMap />
           </div>
         </div>
       </section>
 
-      {/* ── Metrics strip ── */}
-      <section className="bg-stone-25 pb-16 pt-8 md:pb-20 md:pt-10">
+      {/* ── Evidence strip ── */}
+      <section className="bg-stone-25 py-10 md:py-12">
         <div className="container-shell">
-          <MetricsStrip metrics={homePageContent.metrics} />
+          <EvidenceStrip items={evidence} />
         </div>
       </section>
 
-      {/* ── Why Kafwego ── */}
+      {/* ── The exploration case ── */}
       <section className="section-gap bg-white">
         <div className="container-shell">
           <SectionIntro
-            eyebrow="Why Kafwego"
-            title="A focused exploration thesis with disciplined progression"
-            description="Four reasons a serious investor should pay attention to this project."
+            eyebrow={explorationCase.eyebrow}
+            title={explorationCase.title}
+            description={explorationCase.description}
           />
-          <IconCards cards={whyCards} />
+          <IconCards cards={explorationCase.cards} />
         </div>
       </section>
 
-      {/* ── Project Snapshot ── */}
+      {/* ── What remains unproven ── */}
+      <OpenQuestionSection
+        eyebrow={openQuestion.eyebrow}
+        title={openQuestion.title}
+        paragraphs={openQuestion.paragraphs}
+        closing={openQuestion.closing}
+      />
+
+      {/* ── Five priority targets ── */}
       <section className="section-gap bg-stone-25">
-        <div className="container-shell grid gap-10 lg:grid-cols-2 lg:items-start">
-          <PlaceholderAsset
-            label="Placeholder: Zambia project location map — replace with verified geological / location map showing project boundary and regional context"
-            aspect="aspect-[4/3]"
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow={targets.eyebrow}
+            title={targets.title}
+            description={targets.description}
           />
-          <div>
-            <SectionIntro
-              eyebrow="Project"
-              title="Project Snapshot"
-              description="Kafwego is a greenfield copper-gold exploration project in northwestern Zambia with IOCG targeting logic, favorable district context, and a phased path toward drilling, resource definition, and development decision points."
-            />
-            <ul className="space-y-3">
-              {[
-                "District context within the Greater Lufilian Arc copper belt",
-                "Technical indicators consistent with IOCG targeting logic",
-                "Surface geochemistry signatures up to 1.93% Cu and 1.20 g/t Au",
-                "108 km² tenement providing district-scale exploration scope",
-                "Staged partner exposure to discovery upside with capital discipline",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm text-charcoal-600">
-                  <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-copper-400" />
-                  {item}
+          <div className="grid gap-8 lg:grid-cols-5 lg:gap-10">
+            <div className="lg:col-span-3">
+              <TargetMap />
+            </div>
+            <ul className="space-y-3 lg:col-span-2">
+              {targetsContent.targets.map((target) => (
+                <li key={target.id}>
+                  <Card className="border-l-2 border-l-copper-500">
+                    <h3 className="font-semibold text-charcoal-900">{target.name}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-charcoal-600">
+                      {target.significance}
+                    </p>
+                  </Card>
                 </li>
               ))}
             </ul>
-            <div className="mt-8">
-              <Button href="/project" secondary>View Full Project Page</Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Investment Case Preview ── */}
-      <section className="section-gap bg-white">
-        <div className="container-shell">
-          <SectionIntro
-            eyebrow="Investment case"
-            title="A concise institutional logic"
-            description="Four dimensions that frame the investment rationale for Kafwego."
-          />
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {homePageContent.investmentPreview.map((card) => (
-              <Card key={card.title} accent>
-                <h3 className="font-semibold text-charcoal-900">{card.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{card.body}</p>
-              </Card>
-            ))}
           </div>
           <div className="mt-8">
-            <Button href="/investment-case" secondary>Read the Full Investment Case</Button>
+            <Button href="/targets" secondary>
+              Explore all targets
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* ── Value Pathway ── */}
-      <section className="section-gap bg-stone-25">
-        <div className="container-shell">
-          <SectionIntro
-            eyebrow="Value pathway"
-            title="Milestones aligned to evidence"
-            description="Capital and work advance together — each phase is triggered by technical progress, not by time alone."
-          />
-          <ValueTimeline steps={homePageContent.milestones} />
-        </div>
-      </section>
-
-      {/* ── Responsible Development ── */}
+      {/* ── Regional context ── */}
       <section className="section-gap bg-white">
-        <div className="container-shell grid gap-10 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        <div className="container-shell grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
             <SectionIntro
-              eyebrow="Responsible Development"
-              title="Operational quality from the outset"
-            />
-            <p className="text-charcoal-600 leading-relaxed">
-              Responsible development is not an add-on. It is part of project quality. Kafwego&rsquo;s
-              approach emphasizes environmental discipline, stakeholder engagement, regulatory
-              alignment, and long-term local value creation from the earliest stages of project
-              advancement.
-            </p>
-            <div className="mt-6">
-              <Button href="/responsible-development" secondary>
-                Learn about our approach
-              </Button>
-            </div>
-          </div>
-          <div className="hidden lg:block">
-            <PlaceholderAsset
-              label="Placeholder: Field / environmental imagery"
-              aspect="aspect-square"
+              eyebrow={regional.eyebrow}
+              title={regional.title}
+              description={regional.description}
             />
           </div>
+          <RegionalContextMap />
         </div>
       </section>
 
-      {/* ── Team Preview ── */}
+      {/* ── Next value inflection ── */}
       <section className="section-gap bg-stone-25">
         <div className="container-shell">
           <SectionIntro
-            eyebrow="Team"
-            title="Execution-focused leadership"
-            description="Kafwego is led by a team combining geological expertise, financial discipline, and local operating experience."
+            eyebrow={inflection.eyebrow}
+            title={inflection.title}
+            description={inflection.description}
           />
-          <TeamCards members={teamPageContent.leaders} />
+          <ProgressionFlow steps={inflection.steps} />
           <div className="mt-8">
-            <Button href="/team" secondary>View Full Team</Button>
+            <Button href="/exploration-program" secondary>
+              See the full exploration programme
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* ── Final CTA ── */}
+      {/* ── Work completed ── */}
+      <section className="section-gap bg-white">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow={workCompleted.eyebrow}
+            title={workCompleted.title}
+            description={workCompleted.description}
+          />
+          <WorkCompletedList items={projectPageContent.workCompleted} />
+        </div>
+      </section>
+
+      {/* ── Project tenure — renders only when verified facts exist ── */}
+      {hasTenure && (
+        <section className="section-gap bg-stone-25">
+          <div className="container-shell">
+            <SectionIntro eyebrow="Tenure" title="Project tenure" />
+            <ProjectFactGrid facts={tenureFacts} />
+          </div>
+        </section>
+      )}
+
+      {/* ── Disclosures ── */}
+      <section className="section-gap-sm bg-white">
+        <div className="container-shell">
+          <TechnicalDisclosures
+            include={["explorationTarget", "historicalInformation", "forwardLooking"]}
+          />
+        </div>
+      </section>
+
       <CTASection
-        title="Explore a disciplined entry into Zambia's copper-gold frontier"
-        subtitle="Request the investor brief or schedule a technical briefing to begin a structured diligence conversation."
+        title="Request the Kafwego Technical Package"
+        subtitle="Qualified investors and strategic partners can request access to additional project materials, including technical summaries, target information and the proposed exploration programme."
       />
     </>
   );

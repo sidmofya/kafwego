@@ -277,7 +277,7 @@ export default function LufilianArcClient() {
       Array.from(dotsEl?.children ?? []).forEach((d, j) => {
         d.removeEventListener('click', dotClickHandlers[j])
       })
-      dotsEl && (dotsEl.innerHTML = '')
+      if (dotsEl) dotsEl.innerHTML = ''
       Array.from(svg.children).forEach(n => { if (n !== defs) svg.removeChild(n) })
     }
   }, [])
@@ -442,6 +442,26 @@ export default function LufilianArcClient() {
               </a>
             ))}
           </nav>
+
+          {/* Regional context, not deposit analogue — the distinction this page must not blur. */}
+          <div className="mt-10 rounded-xl border-l-2 border-l-copper-500 border border-stone-200 bg-white p-6">
+            <h2 className="text-[11px] tracking-[0.2em] uppercase font-semibold text-copper-600">
+              Regional context, not deposit analogue
+            </h2>
+            <p className="mt-3 text-charcoal-600 leading-relaxed max-w-3xl">
+              This page explains the broader geological evolution of the Greater Lufilian
+              Arc. Kafwego&rsquo;s current exploration hypothesis is IOCG-style and should
+              not be interpreted as a claim that Kafwego represents the same mineralisation
+              style as the sediment-hosted copper&ndash;cobalt deposits that dominate much
+              of the Central African Copperbelt.
+            </p>
+            <p className="mt-3 text-charcoal-500 text-sm leading-relaxed max-w-3xl">
+              The stratigraphy, ore-forming process and timing described below relate to the
+              regional copper&ndash;cobalt system. They are presented as geological
+              background for the province in which Kafwego sits, not as evidence of
+              mineralisation, grade, deposit style or scale at Kafwego itself.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -787,10 +807,11 @@ export default function LufilianArcClient() {
               <text x="280" y="124" fontSize="12" fill="#7a6e62" textAnchor="middle" fontFamily="ui-sans-serif,system-ui,sans-serif">Allochthonous nappes</text>
               <text x="400" y="144" fontSize="12" fill="#7a6e62" textAnchor="middle" fontFamily="ui-sans-serif,system-ui,sans-serif">Kakoma–Kamano thrust</text>
               <text x="640" y="140" fontSize="12" fill="#7a6e62" textAnchor="end"    fontFamily="ui-sans-serif,system-ui,sans-serif">Zambezi belt</text>
-              {/* Kafwego pin */}
-              <circle cx="500" cy="122" r="4" fill="#1D9E75"/>
-              <line x1="500" y1="127" x2="500" y2="148" stroke="#1D9E75" strokeWidth="1.2"/>
-              <text x="500" y="108" fontSize="12" fill="#1d9e75" textAnchor="middle" fontFamily="ui-sans-serif,system-ui,sans-serif">Kafwego (approx.)</text>
+              {/* Kafwego pin — copper, deliberately NOT the teal used for the Cu-Co
+                  horizon, so the marker cannot read as placing Kafwego on that horizon. */}
+              <circle cx="500" cy="122" r="4" fill="#A95A33"/>
+              <line x1="500" y1="127" x2="500" y2="148" stroke="#A95A33" strokeWidth="1.2" strokeDasharray="3 2"/>
+              <text x="500" y="108" fontSize="12" fill="#A95A33" textAnchor="middle" fontFamily="ui-sans-serif,system-ui,sans-serif">Kafwego (schematic)</text>
               {/* on-fill labels */}
               <text x="140" y="250" fontSize="12" textAnchor="middle" fill="#d4c8b4" fontFamily="ui-sans-serif,system-ui,sans-serif">Congo craton basement</text>
               <text x="480" y="238" fontSize="12" textAnchor="middle" fill="#d4c8b4" fontFamily="ui-sans-serif,system-ui,sans-serif">Basement dome</text>
@@ -816,9 +837,11 @@ export default function LufilianArcClient() {
             stacked in the nappes, folded in the Zambian cover. Same copper horizon, four
             structural fates. That is why ore character changes across the belt: the transported
             Congolese nappes carry cobalt-rich dolomite-hosted ore, while the Zambian cover
-            carries siliciclastic-hosted ore with lower cobalt. The Kafwego pin is positional
-            shorthand only — it places the project in the correct structural domain, nothing
-            more precise.
+            carries siliciclastic-hosted ore with lower cobalt. The Kafwego marker is schematic
+            shorthand only — it indicates the broad structural domain, nothing more precise,
+            and is shown in copper rather than the Cu&ndash;Co horizon colour because Kafwego
+            is being tested against an IOCG model, not the sediment-hosted copper&ndash;cobalt
+            system described here.
           </div>
         </div>
       </section>

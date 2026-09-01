@@ -1,44 +1,83 @@
-import Image from "next/image";
-import { Card, MetricCard, PlaceholderAsset } from "@/components/ui";
 import { ReactNode } from "react";
+import { Card } from "@/components/ui";
+import { renderFacts, type LabelledFact } from "@/content/project-facts";
 
-// Metric strip: 6 key stats for the home hero
-export function MetricsStrip({ metrics }: { metrics: { value: string; unit?: string; label: string; qualifier?: string }[] }) {
+/** Non-numeric evidence facts. Deliberately not a metrics strip — no headline grades. */
+export function EvidenceStrip({
+  items,
+}: {
+  items: { value: string; label: string }[];
+}) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-      {metrics.map((m) => (
-        <MetricCard key={m.label} value={m.value} unit={m.unit} label={m.label} qualifier={m.qualifier} />
+    <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-stone-200 bg-stone-200 md:grid-cols-3 lg:grid-cols-5">
+      {items.map((item) => (
+        <div key={item.label} className="bg-white px-5 py-6">
+          <dt className="sr-only">{item.label}</dt>
+          <dd>
+            <span className="block text-2xl font-light tracking-tight text-charcoal-900">
+              {item.value}
+            </span>
+            <span className="mt-1.5 block text-sm text-charcoal-600">{item.label}</span>
+          </dd>
+        </div>
       ))}
-    </div>
+    </dl>
   );
 }
 
-// Legacy FactsGrid for simpler fact lists
-export function FactsGrid({ facts }: { facts: string[] }) {
+/** The "what drilling must establish" block. Reads as discipline, not as a disclaimer. */
+export function OpenQuestionSection({
+  eyebrow,
+  title,
+  paragraphs,
+  closing,
+}: {
+  eyebrow: string;
+  title: string;
+  paragraphs: string[];
+  closing?: string;
+}) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {facts.map((fact) => (
-        <Card key={fact}>
-          <p className="text-sm font-medium text-charcoal-700">{fact}</p>
-        </Card>
-      ))}
-    </div>
+    <section className="section-gap bg-charcoal-900">
+      <div className="container-shell">
+        <div className="max-w-3xl">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-copper-400">
+            {eyebrow}
+          </p>
+          <h2 className="text-2xl font-semibold leading-snug text-white md:text-3xl">{title}</h2>
+          <div className="my-7 h-px w-12 bg-copper-500" />
+          <div className="space-y-5">
+            {paragraphs.map((p) => (
+              <p key={p.slice(0, 40)} className="text-lg leading-relaxed text-stone-400">
+                {p}
+              </p>
+            ))}
+          </div>
+          {closing && (
+            <p className="mt-8 border-l-2 border-copper-500 pl-5 text-lg font-medium leading-relaxed text-white">
+              {closing}
+            </p>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }
 
-// Icon cards with SVG icon slot
 export function IconCards({
   cards,
 }: {
-  cards: { title: string; body: string; icon: ReactNode }[];
+  cards: { title: string; body: string; icon?: ReactNode }[];
 }) {
   return (
-    <div className="grid gap-5 md:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2">
       {cards.map((card) => (
         <Card key={card.title}>
-          <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-copper-50 text-copper-500">
-            {card.icon}
-          </div>
+          {card.icon && (
+            <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-md bg-copper-100 text-copper-600">
+              {card.icon}
+            </div>
+          )}
           <h3 className="font-semibold text-charcoal-900">{card.title}</h3>
           <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{card.body}</p>
         </Card>
@@ -47,41 +86,166 @@ export function IconCards({
   );
 }
 
-// Quick fact band for project/investment-case pages
-export function QuickFactBand({ facts }: { facts: [string, string][] }) {
+/** Renders only facts that are both verified and cleared for public disclosure. */
+export function ProjectFactGrid({ facts }: { facts: LabelledFact[] }) {
+  const visible = renderFacts(facts);
+  if (visible.length === 0) return null;
+
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {facts.map(([label, value]) => (
-        <div
-          key={label}
-          className="rounded-xl border border-stone-100 bg-white px-5 py-4 shadow-sm"
-        >
-          <p className="text-xs font-semibold uppercase tracking-widest text-copper-500">{label}</p>
-          <p className="mt-1.5 font-semibold text-charcoal-900">{value}</p>
+    <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {visible.map((fact) => (
+        <div key={fact.label} className="rounded-xl border border-stone-100 bg-white p-5 shadow-sm">
+          <dt className="text-xs font-semibold uppercase tracking-wide text-charcoal-500">
+            {fact.label}
+          </dt>
+          <dd className="mt-1.5 text-charcoal-900">{fact.value}</dd>
         </div>
       ))}
+    </dl>
+  );
+}
+
+export function ProjectTimeline({
+  entries,
+  caution,
+}: {
+  entries: { period: string; title: string; items: string[] }[];
+  caution?: string;
+}) {
+  return (
+    <div>
+      <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {entries.map((entry, i) => (
+          <li key={entry.period} className="relative">
+            <div className="flex items-center gap-3">
+              <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-copper-500 text-xs font-semibold text-white">
+                {i + 1}
+              </span>
+              <span className="text-sm font-semibold tracking-wide text-charcoal-900">
+                {entry.period}
+              </span>
+            </div>
+            <div className="mt-4 border-t border-stone-200 pt-4">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-copper-600">
+                {entry.title}
+              </h3>
+              <ul className="mt-3 space-y-2">
+                {entry.items.map((item) => (
+                  <li key={item} className="flex gap-2.5 text-sm leading-relaxed text-charcoal-600">
+                    <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-copper-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+      {caution && <p className="mt-8 text-xs leading-relaxed text-charcoal-500">{caution}</p>}
     </div>
   );
 }
 
-// Value pathway timeline with connecting line
-export function ValueTimeline({
+/** Work completed. Distinguishes finished technical work from work still in progress. */
+export function WorkCompletedList({
+  items,
+}: {
+  items: { title: string; body: string; state: "complete" | "in-progress" | "next" }[];
+}) {
+  const stateMeta = {
+    complete: { label: "Complete", cls: "bg-copper-100 text-copper-700" },
+    "in-progress": { label: "In progress", cls: "bg-stone-100 text-charcoal-600" },
+    next: { label: "Next phase", cls: "bg-charcoal-900 text-stone-300" },
+  } as const;
+
+  return (
+    <ul className="divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-100 bg-white shadow-sm">
+      {items.map((item) => (
+        <li key={item.title} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-start sm:gap-6">
+          <div className="sm:w-56 sm:flex-shrink-0">
+            <h3 className="font-medium text-charcoal-900">{item.title}</h3>
+            <span
+              className={`mt-1.5 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${stateMeta[item.state].cls}`}
+            >
+              {stateMeta[item.state].label}
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed text-charcoal-600">{item.body}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Linear progression: evidence → test → evidence → decision. */
+export function ProgressionFlow({
   steps,
 }: {
   steps: { title: string; body: string }[];
 }) {
   return (
-    <div className="relative">
-      {/* Connecting line (desktop) */}
-      <div className="absolute left-0 right-0 top-5 hidden h-px bg-stone-200 md:block" style={{ left: "2.5rem", right: "2.5rem" }} />
-      <div className="grid gap-6 md:grid-cols-4">
-        {steps.map((step, i) => (
-          <div key={step.title} className="relative flex flex-col">
-            <div className="relative z-10 mb-5 flex h-10 w-10 items-center justify-center rounded-full border-2 border-copper-500 bg-white text-sm font-semibold text-copper-500">
+    <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {steps.map((step, i) => (
+        <li key={step.title} className="relative">
+          <Card className="h-full">
+            <span className="text-xs font-semibold uppercase tracking-widest text-copper-500">
               {String(i + 1).padStart(2, "0")}
-            </div>
-            <h3 className="font-semibold text-charcoal-900">{step.title}</h3>
+            </span>
+            <h3 className="mt-3 font-semibold text-charcoal-900">{step.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{step.body}</p>
+          </Card>
+          {i < steps.length - 1 && (
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-copper-400 lg:bottom-auto lg:left-auto lg:right-[-14px] lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0"
+            >
+              ↓<span className="hidden lg:inline">→</span>
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/** The branching technical gate — the most important investor graphic on the site. */
+export function StageGateDiagram({
+  inputLabel,
+  testLabel,
+  gateLabel,
+  branches,
+}: {
+  inputLabel: string;
+  testLabel: string;
+  gateLabel: string;
+  branches: { outcome: string; decision: string }[];
+}) {
+  return (
+    <div className="rounded-2xl border border-stone-200 bg-white p-6 md:p-10">
+      <div className="mx-auto max-w-sm space-y-3 text-center">
+        <div className="rounded-lg border border-stone-200 bg-stone-25 px-5 py-3.5 text-sm font-medium text-charcoal-800">
+          {inputLabel}
+        </div>
+        <div aria-hidden="true" className="text-copper-400">↓</div>
+        <div className="rounded-lg bg-copper-500 px-5 py-3.5 text-sm font-semibold text-white">
+          {testLabel}
+        </div>
+        <div aria-hidden="true" className="text-copper-400">↓</div>
+        <div className="rounded-lg bg-charcoal-900 px-5 py-3.5 text-sm font-semibold text-white">
+          {gateLabel}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
+        {branches.map((branch) => (
+          <div
+            key={branch.outcome}
+            className="rounded-lg border border-stone-200 bg-stone-25 p-5"
+          >
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-copper-600">
+              {branch.outcome}
+            </h4>
+            <p className="mt-2 text-sm leading-relaxed text-charcoal-700">{branch.decision}</p>
           </div>
         ))}
       </div>
@@ -89,111 +253,60 @@ export function ValueTimeline({
   );
 }
 
-// Team member cards with photo placeholder
+export function InvestmentFeatures({
+  features,
+}: {
+  features: { title: string; body: string }[];
+}) {
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {features.map((feature, i) => (
+        <div key={feature.title} className="border-l-2 border-copper-500 pl-5">
+          <span className="text-xs font-semibold uppercase tracking-widest text-copper-500">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <h3 className="mt-2 font-semibold text-charcoal-900">{feature.title}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{feature.body}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function ResponsiblePillars({
+  pillars,
+}: {
+  pillars: { title: string; body: string }[];
+}) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      {pillars.map((pillar) => (
+        <Card key={pillar.title}>
+          <h3 className="font-semibold text-charcoal-900">{pillar.title}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{pillar.body}</p>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
 export function TeamCards({
   members,
 }: {
   members: { name: string; title: string; bio: string; relevance: string }[];
 }) {
   return (
-    <div className="grid gap-5 md:grid-cols-3">
-      {members.map((m) => (
-        <Card key={m.title} className="flex flex-col">
-          <div className="mb-5 flex min-h-40 items-center justify-center rounded-lg border border-dashed border-stone-200 bg-stone-50 text-center text-xs leading-snug text-charcoal-400 px-3">
-            Placeholder: Team photo<br />{m.title}
-          </div>
-          <h3 className="font-semibold text-charcoal-900">{m.name}</h3>
-          <p className="text-sm font-medium text-copper-500 mt-0.5">{m.title}</p>
-          <p className="mt-3 text-sm leading-relaxed text-charcoal-600">{m.bio}</p>
-          <div className="mt-4 border-t border-stone-100 pt-4">
-            <p className="text-xs text-charcoal-500">
-              <span className="font-semibold text-charcoal-700">Relevance: </span>
-              {m.relevance}
-            </p>
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-// Diligence pathway — numbered steps in a horizontal sequence
-export function DiligencePath({ steps }: { steps: string[] }) {
-  return (
-    <div className="grid gap-4 md:grid-cols-5">
-      {steps.map((step, i) => (
-        <div key={step} className="relative rounded-xl border border-stone-100 bg-white p-5 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-widest text-copper-500 mb-2">
-            {String(i + 1).padStart(2, "0")}
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {members.map((member) => (
+        <Card key={member.name}>
+          <h3 className="font-semibold text-charcoal-900">{member.name}</h3>
+          <p className="mt-1 text-sm font-medium text-copper-600">{member.title}</p>
+          <p className="mt-3 text-sm leading-relaxed text-charcoal-600">{member.bio}</p>
+          <p className="mt-3 border-t border-stone-100 pt-3 text-sm leading-relaxed text-charcoal-500">
+            {member.relevance}
           </p>
-          <p className="text-sm font-semibold text-charcoal-900 leading-snug">{step}</p>
-          {i < steps.length - 1 && (
-            <div className="absolute -right-2 top-1/2 hidden -translate-y-1/2 text-stone-300 md:block text-lg font-light">
-              ›
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Value inflection cards
-export function InflectionPoints({ points }: { points: { title: string; body: string }[] }) {
-  return (
-    <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
-      {points.map((p, i) => (
-        <div
-          key={p.title}
-          className="rounded-xl border border-stone-100 bg-white p-5 shadow-sm"
-        >
-          <div className="mb-3 text-2xl font-light text-copper-300">{String(i + 1)}</div>
-          <h3 className="text-sm font-semibold text-charcoal-900">{p.title}</h3>
-          <p className="mt-1.5 text-xs leading-relaxed text-charcoal-600">{p.body}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Responsible development pillars
-export function ResponsiblePillars({
-  pillars,
-}: {
-  pillars: { title: string; body: string; icon: ReactNode }[];
-}) {
-  return (
-    <div className="grid gap-5 md:grid-cols-2">
-      {pillars.map((p) => (
-        <Card key={p.title}>
-          <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-stone-100 text-charcoal-600">
-            {p.icon}
-          </div>
-          <h3 className="font-semibold text-charcoal-900">{p.title}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{p.body}</p>
         </Card>
       ))}
     </div>
   );
 }
-
-// Investment case feature strip
-export function InvestmentFeatures({ features }: { features: { title: string; body: string }[] }) {
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {features.map((f) => (
-        <div
-          key={f.title}
-          className="rounded-xl border border-stone-100 bg-white px-6 py-5 shadow-sm"
-        >
-          <div className="mb-1 h-0.5 w-8 rounded-full bg-copper-400" />
-          <h3 className="mt-3 font-semibold text-charcoal-900">{f.title}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-charcoal-600">{f.body}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Re-export for backward-compat usage in any pages that still import PlaceholderAsset from here
-export { PlaceholderAsset };

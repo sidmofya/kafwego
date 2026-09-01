@@ -1,109 +1,73 @@
-# Kafwego Investor Website Blueprint
+# Kafwego website — architecture
 
-## 1) Concise Implementation Plan
-1. Establish App Router shell with institutional navigation, sticky header, premium palette, and legalized footer.
-2. Implement structured content model under `/content` so core copy remains editable outside JSX.
-3. Build reusable section components (hero blocks, fact grids, icon cards, timeline, team cards, CTA bands, map placeholders, legal blocks).
-4. Deliver seven required pages with disciplined information hierarchy and cautious exploration-stage language.
-5. Implement News system with MDX-backed posts, featured story support, category tags, and article template.
-6. Configure page-level metadata and Open Graph placeholders for SEO readiness.
+The site is a public-facing exploration investment memo. Its single commercial
+objective is to cause a qualified investor or strategic partner to request the
+technical package and begin a diligence conversation.
 
-## 2) Site Map
-- Home (`/`)
-- Project (`/project`)
-- Investment Case (`/investment-case`)
-- Team (`/team`)
-- Responsible Development (`/responsible-development`)
-- News / Updates (`/news`)
-  - Article template (`/news/[slug]`)
-- Contact (`/contact`)
+It is deliberately **not** a mining promotion site. The organising spine is:
 
-## 3) Page Wireframes (Text)
+> Observation → Interpretation → Test → Decision
 
-### Home
-- Hero + fast facts + dual CTAs
-- Why Kafwego cards
-- Project snapshot split layout (map + summary)
-- Investment case preview cards
-- Value pathway timeline
-- Responsible development preview
-- Team preview
-- Final CTA band
+## Governing rule
 
-### Project
-- Hero
-- Quick facts band
-- Project overview
-- Location and regional context map block
-- Geological setting card set
-- Surface indicators + cautious technical qualifier
-- Comparable context + infrastructure logic
-- Next work program
-- CTA band
+No fact appears publicly unless it passes two independent filters, both enforced in
+`content/project-facts.ts`:
 
-### Investment Case
-- Hero
-- Salient feature cards
-- Why Copper / Why Zambia / Why Kafwego / Why This Structure
-- Value inflection cards
-- Diligence pathway sequence
-- CTA band
+| | Verified | Unverified |
+|---|---|---|
+| **Non-sensitive** | Publish | Omit until sourced |
+| **Sensitive** | Package only | Omit; package-only once sourced |
 
-### Team
-- Hero
-- Leadership card grid
-- Technical credibility block
-- Operating approach block
-- CTA band
+`renderFacts()` filters on both `status` and `sensitivity`, so a fact marked
+`package` cannot reach a public render path even after someone fills in its value.
+In development it warns to console when a withheld fact is requested.
 
-### Responsible Development
-- Hero
-- Operational approach intro
-- Four pillar cards
-- CTA band
+Source of truth is `Kafwego_Project_Development__v1.pdf`. Every verified fact carries
+a `source` string citing its deck page.
 
-### News / Updates
-- Intro
-- Featured article block
-- Categorized update card grid
-- Article template for single post rendering
+## Routes
 
-### Contact
-- Hero
-- Inquiry type section
-- Contact form
-- Direct contact card
-- legal disclaimer
+| Route | Purpose |
+|---|---|
+| `/` | The three-minute investor memo. Hero → evidence → exploration case → what remains unproven → targets → regional context → next inflection → work completed → tenure → disclosures → CTA |
+| `/project` | Seven numbered sections: at a glance, location, geological hypothesis, history, work completed, current position, tenure |
+| `/targets` | Recreated target map, five target cards, evidence matrix, selection criteria |
+| `/exploration-program` | Three stage-gated stages and the technical decision gate |
+| `/investment-case` | Six diligence reasons, partnership pathways, diligence process |
+| `/responsible-development` | Work actually underway, separated from stated principles |
+| `/lufilianarc` | Regional geology briefing. Carries a prominent "regional context, not deposit analogue" qualifier |
+| `/contact` | The single conversion point — technical package request form |
+| `/legal` | Full disclosure set |
+| `/team` | Hidden while `teamPageContent.leaders` is empty — excluded from nav, sitemap and indexing |
 
-## 4) Reusable Component Inventory
-- `Header`
-- `Footer`
-- `CTASection`
-- `SectionIntro`
-- `Button`
-- `Card`
-- `FactsGrid`
-- `IconCards`
-- `Timeline`
-- `TeamCards`
-- `PlaceholderAsset`
+## Conversion
 
-## 5) Complete Draft Copy
-All draft copy is implemented as structured maintainable content in:
-- `content/site.ts`
-- `content/pages/home.ts`
-- `content/pages/project.ts`
-- `content/pages/investment-case.ts`
-- `content/pages/team.ts`
-- `content/pages/responsible-development.ts`
-- `content/posts/*.mdx`
+One CTA sitewide: **Request Technical Package**. Secondary, where appropriate:
+**Contact the Project Team**. No competing calls to action.
 
-## 6) Placeholder Guidance
-Implemented placeholders clearly label required asset slots:
-- Hero terrain/geological visual
-- Zambia project location map
-- Geological interpretation map
-- Surface geochemistry figure insertion point (Project page technical block)
-- Team photos (per profile)
-- Investor brief PDF placeholder (News article + contact CTA)
-- Additional technical/field diagrams in project modules
+## Components
+
+Maps are recreated as inline SVG in the site palette, captioned as schematic and
+redrawn from project technical material. No coordinates are published.
+
+- `TargetMap` — licence boundary, five target ellipses, drainage, north arrow, scale bar
+- `RegionalContextMap` — Kafwego within the Greater Lufilian Arc, with established operations
+- `EvidenceStrip`, `OpenQuestionSection`, `ProgressionFlow`, `StageGateDiagram`
+- `ProjectFactGrid`, `ProjectTimeline`, `WorkCompletedList`
+- `TechnicalDisclosures` — composed per page, so each carries only what applies
+- `TechnicalPackageForm` — Netlify Forms, success only on a verified 2xx
+
+There is deliberately no `PlaceholderAsset` component. It was removed so that a
+visible placeholder cannot be reintroduced.
+
+## Disclosure posture
+
+Kafwego is private and not a reporting issuer, so JORC / NI 43-101 do not legally bind
+it. They are followed voluntarily: the project's own technical material invokes
+NI 43-101, the audience evaluates projects against these codes, and statements made
+now would be re-read on any future listing. See `technicalDisclosures` in
+`content/site.ts`. All wording is marked `LEGAL_REVIEW_REQUIRED`.
+
+## Open blockers
+
+See `docs/investor-readiness-blockers.md`.

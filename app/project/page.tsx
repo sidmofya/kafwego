@@ -1,214 +1,165 @@
 import type { Metadata } from "next";
 import { CTASection } from "@/components/layout";
-import { QuickFactBand, IconCards, PlaceholderAsset } from "@/components/page-sections";
-import { PageHero, SectionIntro, Card } from "@/components/ui";
-import { MountainIcon, CompassIcon, GlobeIcon, MapPinIcon } from "@/components/icons";
+import {
+  ProjectFactGrid,
+  ProjectTimeline,
+  WorkCompletedList,
+} from "@/components/page-sections";
+import { RegionalContextMap } from "@/components/regional-context-map";
+import { TechnicalDisclosures } from "@/components/technical-disclosures";
+import { PageHero, SectionIntro } from "@/components/ui";
 import { projectPageContent } from "@/content/pages/project";
+import { projectFacts, renderFacts } from "@/content/project-facts";
+import { technicalDisclosures } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Project",
   description:
-    "Flagship project dossier for Kafwego — a greenfield copper-gold exploration opportunity in northwestern Zambia with IOCG targeting logic and district-scale potential.",
-  openGraph: { images: ["/og-project-placeholder.jpg"] },
+    "Kafwego is an exploration-stage copper-gold project in northwestern Zambia's Greater Lufilian Arc, evaluated under an IOCG-style exploration model.",
 };
 
-const geologyIcons = [
-  <MountainIcon className="w-5 h-5" key="mountain" />,
-  <GlobeIcon className="w-5 h-5" key="globe" />,
-  <CompassIcon className="w-5 h-5" key="compass" />,
-  <MapPinIcon className="w-5 h-5" key="map" />,
+const glanceFacts = [
+  { label: "Country", fact: projectFacts.country },
+  { label: "Region", fact: projectFacts.region },
+  { label: "Geological province", fact: projectFacts.geologicalProvince },
+  { label: "Commodities", fact: projectFacts.commodities },
+  { label: "Project stage", fact: projectFacts.projectStage },
+  { label: "Exploration model", fact: projectFacts.depositStyle },
+  { label: "Priority targets", fact: projectFacts.priorityTargets },
+  {
+    label: "Next major programme",
+    // Derived from the verified metreage, carrying its status, sensitivity and
+    // source through unchanged rather than substituting a free-text claim.
+    fact: {
+      ...projectFacts.initialRCProgramMetres,
+      value:
+        projectFacts.initialRCProgramMetres.value === null
+          ? null
+          : `${projectFacts.initialRCProgramMetres.value} m RC proof of concept`,
+    },
+  },
+];
+
+const tenureFacts = [
+  { label: "Licence type", fact: projectFacts.licenceType },
+  { label: "Licence area", fact: projectFacts.licenceAreaKm2 },
+  { label: "Granted", fact: projectFacts.licenceGrantDate },
+  { label: "Expiry / renewal", fact: projectFacts.licenceExpiry },
+  { label: "Current standing", fact: projectFacts.licenceStanding },
 ];
 
 export default function ProjectPage() {
-  const geologyCards = projectPageContent.geologyCards.map((c, i) => ({
-    ...c,
-    icon: geologyIcons[i],
-  }));
+  const { hero, location, hypothesis, history, workCompleted, currentPosition, tenure } =
+    projectPageContent;
+  const hasTenure = renderFacts(tenureFacts).length > 0;
 
   return (
     <>
-      <PageHero
-        eyebrow="Copper-Gold Exploration · Northwestern Zambia"
-        title="The Kafwego Project"
-        subtitle="A greenfield copper-gold exploration opportunity in northwestern Zambia with IOCG targeting logic, district-scale potential, and a phased path to value creation."
-        withMap
-      />
+      <PageHero eyebrow={hero.eyebrow} title={hero.title} subtitle={hero.subtitle} />
 
-      {/* ── Quick facts band ── */}
-      <section className="section-gap-sm bg-stone-25">
-        <div className="container-shell">
-          <QuickFactBand facts={projectPageContent.quickFacts} />
-        </div>
-      </section>
-
-      {/* ── Project Overview ── */}
-      <section className="section-gap bg-white">
-        <div className="container-shell max-w-3xl">
-          <SectionIntro
-            eyebrow="Overview"
-            title="Project Overview"
-          />
-          <p className="text-charcoal-600 leading-relaxed">
-            Kafwego is a greenfield copper-gold exploration project located in northwestern Zambia.
-            The project is being advanced on an IOCG-style exploration thesis supported by favorable
-            structural setting, surface geochemical indications, and regional geological context
-            within the Greater Lufilian Arc.
-          </p>
-          <p className="mt-4 text-charcoal-600 leading-relaxed">
-            The project covers 108 km² and is designed to give partners staged exposure to discovery
-            upside while preserving capital discipline through a milestone-based partnership structure.
-          </p>
-        </div>
-      </section>
-
-      {/* ── Location and Regional Context ── */}
+      {/* ── 01 At a glance ── */}
       <section className="section-gap bg-stone-25">
-        <div className="container-shell grid gap-10 lg:grid-cols-2 lg:items-start">
+        <div className="container-shell">
+          <SectionIntro eyebrow="01 — At a glance" title="Project at a glance" />
+          <ProjectFactGrid facts={glanceFacts} />
+        </div>
+      </section>
+
+      {/* ── 02 Location ── */}
+      <section className="section-gap bg-white">
+        <div className="container-shell grid gap-10 lg:grid-cols-2 lg:items-center">
           <div>
             <SectionIntro
-              eyebrow="Location"
-              title="Location and Regional Context"
-              description="The project sits in northwestern Zambia within a copper-endowed regional setting. District context supports ongoing exploration work, subject to stage-appropriate technical validation."
-            />
-            <ul className="space-y-3">
-              {[
-                "Northwestern Zambia, Greater Lufilian Arc positioning",
-                "Regional structural architecture supports IOCG targeting logic",
-                "Zambia is a proven copper jurisdiction with established infrastructure and regulatory frameworks",
-                "District context consistent with prospective exploration address",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm text-charcoal-600">
-                  <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-copper-400" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-xs text-charcoal-400 leading-relaxed border-t border-stone-100 pt-4">
-              Placeholder guidance: Replace map with a verified layer showing project boundary,
-              regional structural corridors, and relevant reference infrastructure once approved.
-            </p>
-          </div>
-          <PlaceholderAsset
-            label="Placeholder: Geological interpretation and location map — showing project boundary, regional structural features, and district context. Northwestern Zambia / Greater Lufilian Arc."
-            aspect="aspect-[4/3]"
-          />
-        </div>
-      </section>
-
-      {/* ── Geological Setting ── */}
-      <section className="section-gap bg-white">
-        <div className="container-shell">
-          <SectionIntro
-            eyebrow="Geology"
-            title="Geological Setting"
-            description="The exploration model is built on an integrated assessment of structural setting, lithological context, and surface geochemical signatures interpreted within an IOCG framework."
-          />
-          <IconCards cards={geologyCards} />
-        </div>
-      </section>
-
-      {/* ── Surface Results ── */}
-      <section className="section-gap bg-stone-25">
-        <div className="container-shell">
-          <SectionIntro
-            eyebrow="Technical indicators"
-            title="Surface Results"
-            description="Surface geochemistry provides early encouragement for continued work. These values are exploration-stage indicators and should not be read as resource statements."
-          />
-          <div className="grid gap-5 md:grid-cols-3">
-            <Card>
-              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">
-                Copper
-              </p>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-light tracking-tight text-charcoal-900">1.93</span>
-                <span className="text-xl font-light text-charcoal-600">% Cu</span>
-              </div>
-              <p className="mt-1 text-sm text-charcoal-600">Maximum at surface</p>
-            </Card>
-            <Card>
-              <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">
-                Gold
-              </p>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-light tracking-tight text-charcoal-900">1.20</span>
-                <span className="text-xl font-light text-charcoal-600">g/t Au</span>
-              </div>
-              <p className="mt-1 text-sm text-charcoal-600">Maximum at surface</p>
-            </Card>
-            <Card className="bg-stone-50">
-              <p className="text-xs font-semibold uppercase tracking-widest text-charcoal-500 mb-3">
-                Qualifier
-              </p>
-              <p className="text-sm leading-relaxed text-charcoal-600">
-                Surface values provide early encouragement but are exploration-stage indicators.
-                These figures do not represent a defined mineral resource under any reporting
-                standard and should be interpreted accordingly.
-              </p>
-            </Card>
-          </div>
-          <div className="mt-6">
-            <PlaceholderAsset
-              label="Placeholder: Surface geochemistry figure — showing sample locations, copper and gold values, and spatial context relative to structural features and project boundary"
-              aspect="aspect-[16/6]"
+              eyebrow="02 — Location"
+              title={location.title}
+              description={location.body}
             />
           </div>
+          <RegionalContextMap />
         </div>
       </section>
 
-      {/* ── Comparable context + Infrastructure ── */}
-      <section className="section-gap bg-white">
-        <div className="container-shell grid gap-5 md:grid-cols-2">
-          <Card>
-            <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">Comparable context</p>
-            <h3 className="font-semibold text-charcoal-900 mb-2">District framework</h3>
-            <p className="text-sm leading-relaxed text-charcoal-600">
-              The project is being explored within an IOCG framework that invites comparison at
-              the level of geological concept, not equivalence. The Greater Lufilian Arc hosts
-              several significant copper-cobalt systems, providing a credible district context for
-              exploration-stage targeting.
-            </p>
-          </Card>
-          <Card>
-            <p className="text-xs font-semibold uppercase tracking-widest text-copper-500 mb-3">Infrastructure</p>
-            <h3 className="font-semibold text-charcoal-900 mb-2">Development logic</h3>
-            <p className="text-sm leading-relaxed text-charcoal-600">
-              Regional operating context and project staging are considered in technical planning.
-              Zambia&rsquo;s established copper sector provides relevant infrastructure and
-              logistics precedent. Specific infrastructure details will be disclosed in verified
-              technical materials as the project advances.
-            </p>
-          </Card>
-        </div>
-      </section>
-
-      {/* ── Next Work Program ── */}
+      {/* ── 03 Geological hypothesis ── */}
       <section className="section-gap bg-stone-25">
         <div className="container-shell">
-          <SectionIntro
-            eyebrow="Work program"
-            title="Next Work Program"
-            description="The immediate technical agenda is focused on target maturation and preparation for a disciplined first drilling sequence."
-          />
-          <div className="grid gap-4 md:grid-cols-5">
-            {projectPageContent.nextProgram.map((item, i) => (
-              <div
-                key={item}
-                className="rounded-xl border border-stone-100 bg-white p-5 shadow-sm"
+          <SectionIntro eyebrow="03 — Geological model" title={hypothesis.title} />
+          <div className="max-w-3xl space-y-5">
+            {hypothesis.paragraphs.map((p, i) => (
+              <p
+                key={p.slice(0, 40)}
+                className={
+                  i === hypothesis.paragraphs.length - 1
+                    ? "border-l-2 border-copper-500 pl-5 leading-relaxed text-charcoal-800"
+                    : "leading-relaxed text-charcoal-600"
+                }
               >
-                <p className="text-xs font-bold uppercase tracking-widest text-copper-500 mb-2">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <p className="text-sm font-semibold text-charcoal-900">{item}</p>
-              </div>
+                {p}
+              </p>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ── 04 Exploration history ── */}
+      <section className="section-gap bg-white">
+        <div className="container-shell">
+          <SectionIntro eyebrow="04 — History" title={history.title} />
+          <ProjectTimeline
+            entries={history.entries}
+            caution={technicalDisclosures.historicalInformation.body}
+          />
+        </div>
+      </section>
+
+      {/* ── 05 Work completed ── */}
+      <section className="section-gap bg-stone-25">
+        <div className="container-shell">
+          <SectionIntro
+            eyebrow="05 — Work completed"
+            title="Workstreams completed and outstanding"
+            description="Completed technical work is distinguished from regulatory and funding work that remains in progress."
+          />
+          <WorkCompletedList items={workCompleted} />
+        </div>
+      </section>
+
+      {/* ── 06 Current position ── */}
+      <section className="section-gap bg-white">
+        <div className="container-shell">
+          <SectionIntro eyebrow="06 — Current position" title={currentPosition.title} />
+          <div className="max-w-3xl space-y-5">
+            {currentPosition.paragraphs.map((p) => (
+              <p key={p.slice(0, 40)} className="leading-relaxed text-charcoal-600">
+                {p}
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 07 Tenure ── */}
+      <section className="section-gap bg-stone-25">
+        <div className="container-shell">
+          <SectionIntro eyebrow="07 — Tenure" title={tenure.title} />
+          {hasTenure ? (
+            <ProjectFactGrid facts={tenureFacts} />
+          ) : (
+            <p className="max-w-2xl leading-relaxed text-charcoal-600">{tenure.pendingNote}</p>
+          )}
+        </div>
+      </section>
+
+      <section className="section-gap-sm bg-white">
+        <div className="container-shell">
+          <TechnicalDisclosures
+            include={["explorationTarget", "historicalInformation", "forwardLooking"]}
+          />
+        </div>
+      </section>
+
       <CTASection
-        title="Advance diligence through structured technical engagement"
-        subtitle="Request the investor brief or schedule a technical briefing to discuss the project and exploration thesis in detail."
+        title="Request the Kafwego Technical Package"
+        subtitle="Technical summaries, target information and the proposed exploration programme are available to qualified counterparties."
       />
     </>
   );

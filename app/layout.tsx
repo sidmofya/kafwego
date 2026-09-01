@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     template: "%s | Kafwego Project",
   },
   description:
-    "Kafwego is a greenfield copper-gold exploration project in northwestern Zambia, positioned in the Greater Lufilian Arc and structured for disciplined, milestone-based partnership.",
+    "Kafwego is an exploration-stage copper-gold project in northwestern Zambia's Greater Lufilian Arc. Five priority targets have been defined; a 750 m RC proof-of-concept drilling programme is the next major technical step.",
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Kafwego Project",
-    images: ["/og-placeholder.jpg"],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
