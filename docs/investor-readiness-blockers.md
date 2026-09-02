@@ -80,13 +80,19 @@ not exist a failed submission has nowhere to go — and it renders in the footer
 page, so a dead address is visible sitewide.
 **Where it appears:** Footer (all pages), `/contact`, `/legal`, form error state.
 
-### A5b — Confirm the canonical domain resolves
-**Status:** Open.
-**Why it matters:** Canonical URLs, the sitemap and OG card URLs now all point at
-`https://kafwego.com`. If the site is actually served from a different host, social
-previews and search indexing will resolve to the wrong address.
-**Evidence required:** Confirmation that `kafwego.com` is the domain the site is served
-from, and that any other domain the project holds redirects to it.
+### A5b — Attach kafwego.com to the Netlify site
+**Status:** Open. `kafwego.com` exists but is not yet connected to this build.
+**Why it matters:** Until it is attached, the site is served from a `.netlify.app`
+address. Handled in code rather than hardcoded — `content/site-url.ts` derives the site
+URL from Netlify's build environment, so:
+- **Now:** canonical URLs, the sitemap and OG image URLs resolve to the live
+  `.netlify.app` host, so social previews work; and `robots.txt` emits `Disallow: /`,
+  keeping an interim copy out of search results while readiness blockers are open.
+- **After attaching:** Netlify's `URL` becomes `https://kafwego.com`, robots flips to
+  allow, and every canonical URL follows. **No code change required.**
+**Action required:** Netlify → Domain management → add `kafwego.com` as the primary
+domain, then redeploy so the build picks up the new `URL`. Verify `/robots.txt` shows
+`Allow: /` afterwards — that is the signal the switch took effect.
 
 ### A6 — Counsel review of the disclosure set
 **Status:** Open. Marked `LEGAL_REVIEW_REQUIRED` in `content/site.ts`.

@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { teamPageContent } from "@/content/pages/team";
+import { SITE_URL } from "@/content/site-url";
 
 export const dynamic = "force-static";
 
-const BASE = "https://kafwego.com";
+const BASE = SITE_URL;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [

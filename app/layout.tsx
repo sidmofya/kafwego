@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { SITE_URL } from "@/content/site-url";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kafwego.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Kafwego Project | Copper-Gold Exploration in Zambia",
     template: "%s | Kafwego Project",
