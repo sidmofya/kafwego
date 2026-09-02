@@ -4,3 +4,31 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# ── Security headers ──────────────────────────────────────────────────────────
+# Deliberately no script-src Content-Security-Policy: Next.js static export ships
+# an inline hydration script, so a strict script-src would break the site. Only
+# frame-ancestors is set via CSP, which is script-safe. Add a full CSP only after
+# verifying it against a real deploy.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options    = "nosniff"
+    X-Frame-Options           = "DENY"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Content-Security-Policy   = "frame-ancestors 'none'"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# ── Caching ───────────────────────────────────────────────────────────────────
+# Next fingerprints these filenames, so they are safe to cache indefinitely.
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML must revalidate so a redeploy is picked up immediately.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
