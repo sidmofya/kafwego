@@ -3,7 +3,7 @@ export const siteConfig = {
   shortDescription:
     "An exploration-stage copper-gold project in northwestern Zambia's Greater Lufilian Arc, being evaluated under an IOCG-style exploration model.",
   contact: {
-    email: "invest@kafwegoproject.com",
+    email: "invest@kafwego.com",
     location: "Northwestern Zambia",
   },
   ctas: {

@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
       // Withheld from indexing while it carries no verified biographies.
       disallow: teamPageContent.leaders.length === 0 ? ["/team"] : [],
     },
-    sitemap: "https://kafwegoproject.com/sitemap.xml",
+    sitemap: "https://kafwego.com/sitemap.xml",
   };
 }

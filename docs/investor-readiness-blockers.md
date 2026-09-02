@@ -68,11 +68,25 @@ Competent Person.
 to the inclusion of the technical information in the form in which it appears.
 
 ### A5 — Verified project email address
+**Status:** Partially resolved — pending mailbox confirmation.
+**What changed:** The site was inherited pointing at `kafwegoproject.com`, which is not the
+project's domain. Corrected throughout to **`kafwego.com`**: the public contact address is
+now `invest@kafwego.com`, and `metadataBase`, `sitemap.ts` and `robots.ts` all resolve to
+`https://kafwego.com`.
+**What remains:** Confirm the `invest@kafwego.com` mailbox actually exists and is
+monitored. The address is correct by intent but has not been shown to receive mail.
+**Why it still matters:** It is the form's failure-state fallback, so if the mailbox does
+not exist a failed submission has nowhere to go — and it renders in the footer of every
+page, so a dead address is visible sitewide.
+**Where it appears:** Footer (all pages), `/contact`, `/legal`, form error state.
+
+### A5b — Confirm the canonical domain resolves
 **Status:** Open.
-**Why it matters:** `invest@kafwegoproject.com` is inherited from the previous site and has
-not been confirmed to reach anyone. It is currently the form's failure-state fallback, so
-if it does not resolve, a failed submission has nowhere to go.
-**Where it would appear:** Footer, `/contact`, `/legal`, form error state.
+**Why it matters:** Canonical URLs, the sitemap and OG card URLs now all point at
+`https://kafwego.com`. If the site is actually served from a different host, social
+previews and search indexing will resolve to the wrong address.
+**Evidence required:** Confirmation that `kafwego.com` is the domain the site is served
+from, and that any other domain the project holds redirects to it.
 
 ### A6 — Counsel review of the disclosure set
 **Status:** Open. Marked `LEGAL_REVIEW_REQUIRED` in `content/site.ts`.

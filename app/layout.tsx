@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kafwegoproject.com"),
+  metadataBase: new URL("https://kafwego.com"),
   title: {
     default: "Kafwego Project | Copper-Gold Exploration in Zambia",
     template: "%s | Kafwego Project",

@@ -3,7 +3,7 @@ import { teamPageContent } from "@/content/pages/team";
 
 export const dynamic = "force-static";
 
-const BASE = "https://kafwegoproject.com";
+const BASE = "https://kafwego.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
