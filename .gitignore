@@ -28,3 +28,6 @@ yarn-error.log*
 
 # Vercel
 .vercel
+
+# Netlify CLI local link state (site id only; not source)
+.netlify
